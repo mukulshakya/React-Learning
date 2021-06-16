@@ -1,0 +1,39 @@
+:root {
+  --board-dimension: calc(100vw / 2);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.App {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#boardWrapper {
+  width: var(--board-dimension);
+  height: var(--board-dimension);
+  border: 1px solid;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+#boardWrapper > div {
+  width: calc(var(--board-dimension) / 3);
+  height: calc(var(--board-dimension) / 3);
+  border: 1px solid;
+}
+
+#boardWrapper > div.active {
+  background-color: aqua;
+}
+
+#innerBlock {
+  font-size: calc(var(--board-dimension) / 3);
+  text-align: center;
+  line-height: calc(var(--board-dimension) / 3);
+}
