@@ -29,8 +29,14 @@ const winningCombinations = [
   [3, 5, 7],
 ];
 
+const playerTurnState = {
+  [players.first]: [],
+  [players.second]: [],
+};
+
 function App() {
   const [currentPlayer, setCurrentPlayer] = useState(players.first);
+  const [playerTurns, setPlayerTurns] = useState(playerTurnState);
   const [blockState, setBlockState] = useState(blocks);
 
   // {
@@ -72,7 +78,7 @@ function App() {
 
 
     { 
-        1: "O",      
+        1: "",      
         2: "",
         3: "",
         4: "",
@@ -81,10 +87,43 @@ function App() {
         7: "",
         8: "",
         9: "",
-        1: 'O'
+        1: "O"
     }
 
  */
+
+  /**for (const combination of winningCombinations) {
+        // for (const key of combination) {
+        // }
+      }
+
+      // winningCombinations.forEach((combination) => {
+      //   combination.forEach((key) => {
+      //     updatedState[key] === currentPlayer
+
+      //   });
+      // }); */
+
+  /***
+ * 
+ * const updatedPlayerTurns = {
+        ...{ O: [], X: [] },
+        O: [ ...[], index],
+      };
+ * 
+ * {
+        O: [], X: [] , 
+        O: [index],
+      }
+ * {
+   O: [...[1, 3], 4], X: [2]
+ }
+ */
+  const resetStates = () => {
+    setCurrentPlayer(players.first);
+    setPlayerTurns(playerTurnState);
+    setBlockState(blocks);
+  };
 
   const onClick = (e) => {
     const index = e.currentTarget.getAttribute("index");
@@ -93,17 +132,24 @@ function App() {
       const updatedState = { ...blockState, [index]: currentPlayer };
       setBlockState(updatedState);
 
+      const updatedPlayerTurns = {
+        ...playerTurns,
+        [currentPlayer]: [...playerTurns[currentPlayer], parseInt(index)],
+      };
+      setPlayerTurns(updatedPlayerTurns);
+
       for (const combination of winningCombinations) {
-        for (const key of combination) {
+        const currentCombination = updatedPlayerTurns[currentPlayer];
+        const isCurrentPlayerWinner = combination.every((elem) =>
+          currentCombination.includes(elem)
+        );
+        if (isCurrentPlayerWinner) {
+          alert(`${currentPlayer} won.`);
+
+          // reset states after someone has won
+          resetStates();
         }
       }
-
-      // winningCombinations.forEach((combination) => {
-      //   combination.forEach((key) => {
-      //     updatedState[key] === currentPlayer
-
-      //   });
-      // });
 
       setCurrentPlayer(
         currentPlayer === players.first ? players.second : players.first
@@ -123,10 +169,7 @@ function App() {
               index={index + 1}
               onClick={onClick}
             >
-              {/* {blockState[index + 1]}
-               */}
-
-              {index + 1}
+              {blockState[index + 1]}
             </div>
           ))}
       </div>
